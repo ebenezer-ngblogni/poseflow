@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+*.pt
+!weights/.gitkeep
+outputs/
+samples/*.mp4
+samples/*.mov
+samples/*.avi
+data/
+dataset.npz
+*.events.json
+bus.jpg
+.DS_Store
+
+*.mp4
+*.webm
