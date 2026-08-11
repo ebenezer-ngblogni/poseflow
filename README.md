@@ -27,14 +27,6 @@ La plupart des projets de *human pose estimation* s'arrêtent à un notebook qui
 | 🚶 `flow` | **People Flow** | Comptage, temps d'attente, attroupements |
 | 🧠 `action` | **Learned Actions** | Actions apprises par réseau temporel (TCN) |
 
-<p align="center">
-<img src="docs/gifs/safety.gif" width="49%">
-&nbsp;
-<img src="docs/gifs/flow.gif" width="49%">
-</p>
-
-<sub>Démos ci-dessus sur clip mono-personne. Dépose un clip de foule / match dans <code>samples/</code> pour les scènes denses.</sub>
-
 ---
 
 ## Reconnaissance d'action à 2 étages
