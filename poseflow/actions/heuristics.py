@@ -2,7 +2,9 @@
 
 
 def posture(f):
-    if f["torso_angle"] > 50 or f["aspect"] > 1.15:
+    if f["n_vis"] < 7 or not f["lower_vis"]:
+        return "upright"                       # trop occlus pour juger d'une chute
+    if f["torso_angle"] > 55 and f["kp_aspect"] > 1.3:
         return "fallen"
     return "upright"
 
@@ -15,7 +17,7 @@ def locomotion(f):
     m, limb, cad = f["motion"], f["limb_speed"], f["cadence"]
     if m < 0.012 and limb < 0.02:
         return "idle"
-    if limb > 0.11 or (cad > 0.45 and limb > 0.06):
+    if f["lower_vis"] and (limb > 0.13 or (cad > 0.45 and limb > 0.07)):
         return "running"
     return "walking"
 

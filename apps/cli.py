@@ -16,7 +16,7 @@ def probe_fps(source):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PoseFlow — pose + action on video")
+    ap = argparse.ArgumentParser(description="PoseFlow, pose + action sur video")
     ap.add_argument("--source", required=True, help="video path, RTSP url, or webcam index")
     ap.add_argument("--mode", default="safety", choices=list(MODES))
     ap.add_argument("--out", default="out.mp4")

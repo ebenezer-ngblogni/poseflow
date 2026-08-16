@@ -60,7 +60,7 @@ def index(mode: str = "safety"):
 h1{{font-weight:700;letter-spacing:-.5px}} .sub{{color:#8a94a6}}
 select{{background:#1a1f2b;color:#fff;border:1px solid #2a3242;padding:8px;border-radius:8px}}
 img{{width:100%;max-width:900px;border-radius:12px;border:1px solid #222}}</style>
-<h1>PoseFlow <span class=sub>— un moteur, 4 applications</span></h1>
+<h1>PoseFlow <span class=sub>&middot; un moteur, 4 applications</span></h1>
 <p>Mode&nbsp;
 <select onchange="location='/?mode='+this.value">{opts}</select></p>
 <img src="/stream?mode={mode}">"""

@@ -12,7 +12,8 @@ SKELETON = [
 ]
 
 WINDOW = 32          # frames kept per track for temporal analysis
-KP_CONF = 0.30       # min keypoint confidence to trust a joint
+KP_CONF = 0.30       # min keypoint confidence to trust a joint in features
+DRAW_CONF = 0.55     # min keypoint confidence to draw a joint/bone
 
 from .modes import MODES, get_mode  # noqa: E402
 

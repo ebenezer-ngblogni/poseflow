@@ -12,8 +12,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from poseflow import PoseFlow, MODES  # noqa: E402
 
 st.set_page_config(page_title="PoseFlow", layout="wide")
-st.markdown("## 🎯 PoseFlow — un moteur, 4 applications")
-st.caption("Pose multi-personnes + reconnaissance d'action en temps réel · YOLO11-pose + ByteTrack")
+st.markdown("## PoseFlow")
+st.caption("Un moteur temps réel, quatre applications · pose multi-personnes + action · YOLO11-pose + ByteTrack")
 
 with st.sidebar:
     st.header("Configuration")
@@ -52,7 +52,7 @@ if run:
         row = {k: v for k, v in scene.kpis.items() if isinstance(v, (int, float))}
         row["t"] = round(i / 25, 1); hist.append(row)
         if scene.alerts:
-            alerts_log.append(f"t={row['t']}s — " + " · ".join(scene.alerts))
+            alerts_log.append(f"t={row['t']}s · " + " · ".join(scene.alerts))
         if len(hist) > 3 and i % 6 == 0:
             df = pd.DataFrame(hist).set_index("t")
             fig = go.Figure()
@@ -63,4 +63,4 @@ if run:
             chart.plotly_chart(fig, use_container_width=True)
         if alerts_log:
             alert_box.error("🚨 " + "  |  ".join(alerts_log[-3:]))
-    st.success(f"Terminé — {len(hist)} frames analysées.")
+    st.success(f"Terminé, {len(hist)} frames analysées.")

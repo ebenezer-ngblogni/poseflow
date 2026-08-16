@@ -34,7 +34,7 @@ class CrowdSafety(Mode):
             alerts=sorted(set(alerts)), heat=heat)
 
 
-def _fights(feats, heat, thr=0.55):
+def _fights(feats, heat, thr=0.72):
     items = list(feats.items())
     pairs = []
     for i in range(len(items)):
@@ -43,8 +43,12 @@ def _fights(feats, heat, thr=0.55):
             tb, fb = items[j]
             if heat[ta] < thr or heat[tb] < thr:
                 continue
+            if not (fa["lower_vis"] and fb["lower_vis"]):
+                continue
+            if fa["n_vis"] < 9 or fb["n_vis"] < 9:
+                continue
             d = np.linalg.norm(fa["center"] - fb["center"])
-            reach = 0.9 * (fa["height"] + fb["height"]) / 2
+            reach = 0.55 * (fa["height"] + fb["height"]) / 2
             if d < reach:
                 pairs.append((ta, tb))
     return pairs

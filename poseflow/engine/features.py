@@ -57,6 +57,16 @@ def compute(track):
     h = _height(box)
     w = float(box[2] - box[0])
 
+    vis = kp[:, 2] >= KP_CONF
+    n_vis = int(vis.sum())
+    lower_vis = bool(vis[[13, 14, 15, 16]].any())
+    pts = kp[vis, :2]
+    if len(pts) >= 3:
+        span = pts.max(0) - pts.min(0)
+        kp_aspect = float(span[0] / max(span[1], 1.0))
+    else:
+        kp_aspect = w / h
+
     torso = _mid(kp, "left_shoulder", "right_shoulder")
     hip = _mid(kp, "left_hip", "right_hip")
     center = _mid(kp, "left_hip", "right_hip")
@@ -76,11 +86,15 @@ def compute(track):
 
     norm = normalized(track)
     if len(norm) >= 2:
-        disp = np.linalg.norm(np.diff(norm, axis=0), axis=2)
-        motion = float(np.nanmean(disp))
+        confs = np.array([k[:, 2] for k in track.kp])       # (T,17)
+        nn = norm.copy()
+        nn[confs < KP_CONF] = np.nan                        # ignore low-conf joints
+        disp = np.linalg.norm(np.diff(nn, axis=0), axis=2)  # (T-1,17)
+        motion = float(np.nanmedian(disp)) if np.isfinite(disp).any() else 0.0
         limb_idx = [KP[n] for n in ("left_wrist", "right_wrist",
                                     "left_ankle", "right_ankle")]
-        limb = float(np.nanmean(np.linalg.norm(np.diff(norm[:, limb_idx], axis=0), axis=2)))
+        dl = disp[:, limb_idx]
+        limb = float(np.nanmedian(dl)) if np.isfinite(dl).any() else 0.0
     else:
         motion = limb = 0.0
 
@@ -95,6 +109,7 @@ def compute(track):
         "aspect": w / h, "torso_angle": torso_angle,
         "v_down": v_down, "motion": motion, "limb_speed": limb,
         "cadence": cadence, "knee_angle": knee, "elbow_angle": elbow,
+        "n_vis": n_vis, "lower_vis": lower_vis, "kp_aspect": kp_aspect,
         "norm": norm,
     }
 

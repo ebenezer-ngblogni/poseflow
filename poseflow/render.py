@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from .config import SKELETON, KP_CONF
+from .config import SKELETON, DRAW_CONF as KP_CONF
 
 LEVEL = {"ok": (120, 220, 90), "warn": (0, 165, 255), "alert": (60, 60, 240)}
 BONE = (230, 200, 120)
@@ -9,8 +9,14 @@ BONE = (230, 200, 120)
 def draw_person(img, person, ann):
     color = LEVEL.get(ann.level, LEVEL["ok"])
     kp = person.kp
-    for a, b in SKELETON:
-        if kp[a, 2] >= KP_CONF and kp[b, 2] >= KP_CONF:
+    valid = [(a, b) for a, b in SKELETON if kp[a, 2] >= KP_CONF and kp[b, 2] >= KP_CONF]
+    lens = [float(np.linalg.norm(kp[a, :2] - kp[b, :2])) for a, b in valid]
+    if kp[5, 2] >= KP_CONF and kp[6, 2] >= KP_CONF:
+        cap = 3.0 * float(np.linalg.norm(kp[5, :2] - kp[6, :2]))
+    else:
+        cap = 2.5 * np.median(lens) if lens else 0
+    for (a, b), L in zip(valid, lens):
+        if L <= cap:
             cv2.line(img, tuple(kp[a, :2].astype(int)), tuple(kp[b, :2].astype(int)),
                      BONE, 2, cv2.LINE_AA)
     for x, y, c in kp:
